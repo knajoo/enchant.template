@@ -1,2 +1,3 @@
 enchant.template
 ================
+KeyEx
