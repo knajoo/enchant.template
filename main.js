@@ -9,12 +9,55 @@ var gs = {
 		,fps:30
 }; 
 
+var Timer = Class.create(Label,{
+  initialize:function(sec){
+  		Label.call(this);
+		this.prefix = "残り時間: ";
+		this.timer = sec;
+		this.text = this.prefix + this.timer;
+		game.currentScene.addChild(this);
+  },
+	countDown:function(){
+
+	  if (this.age % game.fps === 0){
+	  		this.timer--;
+	  }
+	},
+	update:function(){
+		this.text = this.prefix + this.timer;
+	},
+	onenterframe:function(){
+		this.countDown();
+		this.update();
+	}
+});
+
+var Score = Class.create(Label,{
+		initialize:function(){
+			Label.call(this);
+			this.y = 20;
+			this.text = this.prefix = '得点 :';
+			game.currentScene.addChild(this);
+		},
+	update:function(){
+		this.text = this.prefix + game.score;
+	},
+	onenterframe:function(){
+		this.update();
+	}
+});
+
 window.onload = function(){
 		game = new Core(gs.width,gs.height);
-/*上記のgs.width,gs.heightの部分を３２０等のように数値で記入すると
-何を指定しているかわからないので、上記のように変数を宣言して記述する。*/
 		game.fps = gs.fps;
-		game.onload = function(){};
+		game.score = 0;
+		game.onload = function(){
+				new Timer(30);
+				new Score();
+};
+		game.currentScene.on('touchstart', function(){
+		game.score += 10;
+		});
 		game.start();
 
 };
